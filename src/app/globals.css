@@ -1,0 +1,92 @@
+@import "../styles/pom-tokens.css";
+@import "../styles/pom-patterns.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    color: hsl(var(--pom-ink) / 1);
+    background-color: hsl(var(--pom-canvas) / 1);
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    font-size: var(--pom-text-base);
+    line-height: var(--pom-leading-relaxed);
+    font-weight: 400;
+  }
+
+  /* Display / editorial — Cormorant */
+  .pom-display {
+    font-family: var(--font-cormorant), Georgia, serif;
+    font-weight: 300;
+    letter-spacing: var(--pom-tracking-tight);
+    line-height: var(--pom-leading-tight);
+  }
+
+  .pom-heading {
+    font-family: var(--font-cormorant), Georgia, serif;
+    font-weight: 400;
+    letter-spacing: var(--pom-tracking-tight);
+    line-height: var(--pom-leading-snug);
+  }
+
+  .pom-overline {
+    font-size: var(--pom-text-xs);
+    font-weight: 600;
+    letter-spacing: var(--pom-tracking-wider);
+    line-height: var(--pom-leading-normal);
+    text-transform: uppercase;
+    color: hsl(var(--pom-ink-tertiary) / 1);
+  }
+
+  .pom-caption {
+    font-size: var(--pom-text-sm);
+    line-height: var(--pom-leading-normal);
+    color: hsl(var(--pom-ink-tertiary) / 1);
+  }
+
+  .pom-prose-muted {
+    color: hsl(var(--pom-ink-secondary) / 1);
+  }
+}
+
+@layer utilities {
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+
+  /* Focus ring — use on interactive non-button elements */
+  .pom-focus-ring:focus-visible {
+    outline: 2px solid hsl(var(--pom-ring) / 1);
+    outline-offset: 3px;
+  }
+}
+
+::selection {
+  background: hsl(var(--pom-gold) / 0.28);
+  color: hsl(var(--pom-ink) / 1);
+}
+
+/* Subtle grain — editorial depth */
+.grain {
+  position: relative;
+}
+.grain::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}

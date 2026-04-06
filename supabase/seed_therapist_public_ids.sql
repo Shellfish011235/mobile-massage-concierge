@@ -1,0 +1,10 @@
+-- After creating a therapist auth user and profile row, set public_id to match app mock IDs
+-- so live bookings resolve (tp_elena, tp_marcus, tp_sofia).
+--
+-- Example (replace UUIDs with your real profile + therapist row ids):
+--
+-- update public.therapist_profiles
+-- set public_id = 'tp_elena', is_approved = true, active = true
+-- where id = 'YOUR_THERAPIST_ROW_UUID';
+--
+-- Repeat for tp_marcus and tp_sofia, or insert new therapists with matching public_id strings.

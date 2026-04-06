@@ -1,0 +1,233 @@
+/**
+ * Composable UI patterns — use with Tailwind utilities for layout/spacing.
+ * Principles: calm hover, clear focus, tactile cards, restrained motion.
+ * (No @layer here: this file is @import'd before @tailwind in globals.css.)
+ */
+
+/* ─── Page shell ─── */
+.pom-page {
+    @apply mx-auto w-full max-w-6xl px-gutter-x py-gutter-y;
+  }
+
+  .pom-section {
+    @apply py-section-y;
+  }
+
+  .pom-stack-sm > * + * {
+    margin-top: var(--pom-space-3);
+  }
+
+  .pom-stack-md > * + * {
+    margin-top: var(--pom-space-5);
+  }
+
+  .pom-stack-lg > * + * {
+    margin-top: var(--pom-space-8);
+  }
+
+  /* ─── Cards ─── */
+  .pom-card {
+    border-radius: var(--pom-radius-card);
+    background-color: hsl(var(--pom-surface) / 1);
+    border: 1px solid hsl(var(--pom-border) / 1);
+    box-shadow: var(--pom-shadow-1), var(--pom-shadow-inner-soft);
+  }
+
+  .pom-card--muted {
+    background-color: hsl(var(--pom-surface-raised) / 1);
+    box-shadow: var(--pom-shadow-0);
+  }
+
+  .pom-card--interactive {
+    transition: transform var(--pom-duration) var(--pom-ease-out),
+      box-shadow var(--pom-duration) var(--pom-ease-out),
+      border-color var(--pom-duration) var(--pom-ease-out);
+  }
+
+  .pom-card--interactive:hover {
+    border-color: hsl(var(--pom-border-strong) / 1);
+    box-shadow: var(--pom-shadow-2), var(--pom-shadow-inner-soft);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .pom-card--interactive:hover {
+      transform: translateY(-1px);
+    }
+  }
+
+  .pom-card--interactive:active {
+    transform: translateY(0);
+    transition-duration: var(--pom-duration-fast);
+  }
+
+  /* ─── Buttons ─── */
+  .pom-btn {
+    @apply inline-flex items-center justify-center gap-2 font-medium touch-manipulation;
+    min-height: 2.75rem;
+    padding-inline: var(--pom-space-5);
+    padding-block: var(--pom-space-2-5);
+    border-radius: var(--pom-radius-pill);
+    font-size: var(--pom-text-sm);
+    line-height: var(--pom-leading-none);
+    letter-spacing: var(--pom-tracking-normal);
+    transition: background-color var(--pom-duration) var(--pom-ease-out),
+      color var(--pom-duration) var(--pom-ease-out),
+      border-color var(--pom-duration) var(--pom-ease-out),
+      box-shadow var(--pom-duration) var(--pom-ease-out),
+      transform var(--pom-duration-fast) var(--pom-ease-out);
+  }
+
+  .pom-btn:focus-visible {
+    outline: 2px solid hsl(var(--pom-ring) / 1);
+    outline-offset: 3px;
+  }
+
+  .pom-btn:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  .pom-btn--primary {
+    background-color: hsl(var(--pom-palm) / 1);
+    color: hsl(var(--pom-ink-inverse) / 1);
+    border: 1px solid transparent;
+    box-shadow: var(--pom-shadow-1);
+  }
+
+  .pom-btn--primary:hover:not(:disabled) {
+    background-color: hsl(var(--pom-palm-muted) / 1);
+  }
+
+  .pom-btn--secondary {
+    background-color: hsl(var(--pom-surface) / 1);
+    color: hsl(var(--pom-ink) / 1);
+    border: 1px solid hsl(var(--pom-border-strong) / 1);
+    box-shadow: var(--pom-shadow-inner-soft);
+  }
+
+  .pom-btn--secondary:hover:not(:disabled) {
+    background-color: hsl(var(--pom-champagne) / 1);
+    border-color: hsl(var(--pom-border) / 1);
+  }
+
+  .pom-btn--ghost {
+    background-color: transparent;
+    color: hsl(var(--pom-ink-secondary) / 1);
+    border: 1px solid transparent;
+  }
+
+  .pom-btn--ghost:hover:not(:disabled) {
+    background-color: hsl(var(--pom-canvas-muted) / 1);
+    color: hsl(var(--pom-ink) / 1);
+  }
+
+  .pom-btn--quiet {
+    background-color: hsl(var(--pom-palm-subtle) / 1);
+    color: hsl(var(--pom-palm) / 1);
+    border: 1px solid hsl(var(--pom-border) / 1);
+  }
+
+  .pom-btn--quiet:hover:not(:disabled) {
+    background-color: hsl(var(--pom-sage-subtle) / 1);
+  }
+
+  .pom-btn--danger {
+    background-color: hsl(var(--pom-danger-subtle) / 1);
+    color: hsl(var(--pom-danger) / 1);
+    border: 1px solid hsl(var(--pom-danger-border) / 1);
+  }
+
+  .pom-btn--danger:hover:not(:disabled) {
+    background-color: hsl(var(--pom-surface) / 1);
+    border-color: hsl(var(--pom-danger) / 0.35);
+  }
+
+  .pom-btn--link {
+    min-height: auto;
+    padding-inline: var(--pom-space-1);
+    padding-block: var(--pom-space-1);
+    border-radius: var(--pom-radius-sm);
+    background: transparent;
+    border: none;
+    color: hsl(var(--pom-seaglass) / 1);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+    box-shadow: none;
+  }
+
+  .pom-btn--link:hover:not(:disabled) {
+    color: hsl(var(--pom-ink) / 1);
+  }
+
+  .pom-btn--sm {
+    min-height: 2.25rem;
+    padding-inline: var(--pom-space-4);
+    padding-block: var(--pom-space-2);
+    font-size: var(--pom-text-xs);
+  }
+
+  .pom-btn--lg {
+    min-height: 3rem;
+    padding-inline: var(--pom-space-6);
+    font-size: var(--pom-text-base);
+  }
+
+  /* ─── Badges / chips ─── */
+  .pom-badge {
+    @apply inline-flex items-center gap-1 font-medium whitespace-nowrap;
+    padding-inline: var(--pom-space-2-5);
+    padding-block: var(--pom-space-1);
+    border-radius: var(--pom-radius-pill);
+    font-size: var(--pom-text-xs);
+    line-height: var(--pom-leading-snug);
+    letter-spacing: var(--pom-tracking-wide);
+    text-transform: uppercase;
+    border: 1px solid transparent;
+  }
+
+  .pom-badge--neutral {
+    background-color: hsl(var(--pom-canvas-muted) / 1);
+    color: hsl(var(--pom-ink-secondary) / 1);
+    border-color: hsl(var(--pom-border) / 1);
+  }
+
+  .pom-badge--success {
+    background-color: hsl(var(--pom-success-subtle) / 1);
+    color: hsl(var(--pom-success) / 1);
+    border-color: hsl(var(--pom-success-border) / 1);
+  }
+
+  .pom-badge--warning {
+    background-color: hsl(var(--pom-warning-subtle) / 1);
+    color: hsl(var(--pom-warning) / 1);
+    border-color: hsl(var(--pom-warning-border) / 1);
+  }
+
+  .pom-badge--danger {
+    background-color: hsl(var(--pom-danger-subtle) / 1);
+    color: hsl(var(--pom-danger) / 1);
+    border-color: hsl(var(--pom-danger-border) / 1);
+  }
+
+  .pom-badge--info {
+    background-color: hsl(var(--pom-info-subtle) / 1);
+    color: hsl(var(--pom-info) / 1);
+    border-color: hsl(var(--pom-info-border) / 1);
+  }
+
+  .pom-badge--verified {
+    background-color: hsl(var(--pom-gold-subtle) / 1);
+    color: hsl(var(--pom-ink-secondary) / 1);
+    border-color: hsl(var(--pom-gold) / 0.35);
+    letter-spacing: var(--pom-tracking-wider);
+  }
+
+  .pom-badge--soft {
+    text-transform: none;
+    letter-spacing: var(--pom-tracking-normal);
+    font-size: var(--pom-text-sm);
+    padding-inline: var(--pom-space-3);
+    padding-block: var(--pom-space-1-5);
+    border-radius: var(--pom-radius-lg);
+  }
