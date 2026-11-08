@@ -54,6 +54,9 @@ export async function createBookingAction(
   }
 
   const snapshot = buildBookingFromRequest(parsed.data, therapist);
+  if (snapshot.total > parsed.data.maxAcceptedTotal) {
+    return { ok: false, error: "The quote increased. Please review the updated price and submit again." };
+  }
   snapshot.clientId = user.id;
 
   const appointmentAt = new Date(snapshot.appointmentDateTime);
