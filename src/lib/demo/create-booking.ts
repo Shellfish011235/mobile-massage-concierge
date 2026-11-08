@@ -28,6 +28,10 @@ export function buildBookingFromRequest(
     ...DEFAULT_PLATFORM,
   });
 
+  if (quote.total > input.maxAcceptedTotal) {
+    throw new Error("Quote increased; please refresh and review pricing.");
+  }
+
   const id = `bk_${crypto.randomUUID().slice(0, 12)}`;
 
   return {
