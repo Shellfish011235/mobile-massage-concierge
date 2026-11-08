@@ -56,6 +56,8 @@ export const bookingRequestSchema = z
     quietSettingConfirmed: z.literal(true),
     cleanSurfaceConfirmed: z.literal(true),
     selectedAddOnIds: z.array(z.string()).default([]),
+    /** Client-approved maximum quote (cents); server always recomputes. */
+    maxAcceptedTotal: z.number().int().nonnegative(),
   })
   .strict();
 
