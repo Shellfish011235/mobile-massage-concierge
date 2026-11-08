@@ -1,4 +1,5 @@
 import type { PriceQuote, PriceQuoteInput, PricingLineItem } from "@/types/pricing";
+import { computeDemandAdjustment } from "./demand-pricing";
 
 function subtotalForOffering(input: PriceQuoteInput): { subtotal: number; addOnsTotal: number } {
   const { offering, durationMinutes, selectedAddOnIds } = input;
@@ -21,7 +22,10 @@ export function computePriceQuote(input: PriceQuoteInput): PriceQuote {
   const { subtotal, addOnsTotal } = subtotalForOffering(input);
   const { travelFee, valetFee, platformFeePercent, platformFeeFlat } = input;
 
-  const taxableBase = subtotal + addOnsTotal + travelFee + valetFee;
+  const demand = computeDemandAdjustment(input);
+  // Surcharge applies to session only, never travel, valet or add-ons.
+  const demandAdjustment = Math.round(subtotal * demand.percent / 100);
+  const taxableBase = subtotal + demandAdjustment + addOnsTotal + travelFee + valetFee;
   const platformFee = Math.round(
     taxableBase * (platformFeePercent / 100) + platformFeeFlat,
   );
@@ -31,6 +35,9 @@ export function computePriceQuote(input: PriceQuoteInput): PriceQuote {
   const lineItems: PricingLineItem[] = [
     { key: "session", label: input.offering.name, amount: subtotal },
   ];
+  if (demandAdjustment > 0) {
+    lineItems.push({ key: "demand", label: `${demand.label} (${demand.percent}%)`, amount: demandAdjustment });
+  }
   if (addOnsTotal > 0) {
     lineItems.push({ key: "addons", label: "Add-ons", amount: addOnsTotal });
   }
@@ -51,6 +58,9 @@ export function computePriceQuote(input: PriceQuoteInput): PriceQuote {
     travelFee,
     valetFee,
     platformFee,
+    demandAdjustment,
+    demandPercent: demand.percent,
+    demandLabel: demand.label,
     total,
     therapistPayout,
   };
