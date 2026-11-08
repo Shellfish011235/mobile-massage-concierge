@@ -22,10 +22,15 @@ export function buildBookingFromRequest(
     offering,
     durationMinutes: input.durationMinutes,
     selectedAddOnIds: input.selectedAddOnIds,
+    appointmentDateTime: input.appointmentDateTime,
     travelFee,
     valetFee,
     ...DEFAULT_PLATFORM,
   });
+
+  if (quote.total > input.maxAcceptedTotal) {
+    throw new Error("Quote increased; please refresh and review pricing.");
+  }
 
   const id = `bk_${crypto.randomUUID().slice(0, 12)}`;
 
@@ -50,7 +55,7 @@ export function buildBookingFromRequest(
     quietSettingConfirmed: true,
     cleanSurfaceConfirmed: true,
     status: "requested",
-    subtotal: quote.subtotal + quote.addOnsTotal,
+    subtotal: quote.subtotal + quote.addOnsTotal + quote.demandAdjustment,
     travelFee: quote.travelFee,
     valetFee: quote.valetFee,
     platformFee: quote.platformFee,

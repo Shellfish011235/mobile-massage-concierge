@@ -59,11 +59,12 @@ export function BookingWizard({ therapist }: Props) {
       offering,
       durationMinutes,
       selectedAddOnIds: addOnIds,
+      appointmentDateTime,
       travelFee,
       valetFee,
       ...DEFAULT_PLATFORM,
     });
-  }, [addOnIds, durationMinutes, locationType, offering, valetRequired]);
+  }, [addOnIds, appointmentDateTime, durationMinutes, locationType, offering, valetRequired]);
 
   function toggleAddOn(id: string) {
     setAddOnIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
@@ -116,6 +117,7 @@ export function BookingWizard({ therapist }: Props) {
       quietSettingConfirmed: true as const,
       cleanSurfaceConfirmed: true as const,
       selectedAddOnIds: addOnIds,
+      maxAcceptedTotal: travelPreview.total,
     };
 
     const parsed = bookingRequestSchema.safeParse(raw);
@@ -373,6 +375,9 @@ export function BookingWizard({ therapist }: Props) {
             <CardTitle>Summary</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            <p className="text-pom-sm text-muted-foreground">
+              {appointmentDateTime ? `${travelPreview.demandLabel}${travelPreview.demandPercent ? ` (+${travelPreview.demandPercent}% on session)` : ""}. Price confirmed before submitting; if it increases, you must approve a new quote.` : "Choose a date and time to see applicable pricing."}
+            </p>
             <ul className="space-y-2 text-pom-sm">
               {travelPreview.lineItems.map((line) => (
                 <li key={line.key} className="flex justify-between gap-4">

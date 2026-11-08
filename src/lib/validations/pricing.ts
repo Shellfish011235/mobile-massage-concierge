@@ -23,6 +23,9 @@ export const priceQuoteSchema = z.object({
   travelFee: z.number().nonnegative(),
   valetFee: z.number().nonnegative(),
   platformFee: z.number().nonnegative(),
+  demandAdjustment: z.number().nonnegative(),
+  demandPercent: z.number().min(0).max(35),
+  demandLabel: z.string(),
   total: z.number().nonnegative(),
   therapistPayout: z.number().nonnegative(),
 });

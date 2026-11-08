@@ -1,4 +1,5 @@
 import type { ServiceOffering } from "./service-offering";
+import type { DemandPricingInput } from "@/lib/pricing/demand-pricing";
 
 /**
  * Inputs/outputs for the pricing calculator (Stripe Connect–friendly breakdown).
@@ -10,7 +11,7 @@ export interface PricingLineItem {
   amount: number;
 }
 
-export interface PriceQuoteInput {
+export interface PriceQuoteInput extends DemandPricingInput {
   offering: ServiceOffering;
   durationMinutes: number;
   selectedAddOnIds: string[];
@@ -28,6 +29,9 @@ export interface PriceQuote {
   travelFee: number;
   valetFee: number;
   platformFee: number;
+  demandAdjustment: number;
+  demandPercent: number;
+  demandLabel: string;
   total: number;
   therapistPayout: number;
 }
