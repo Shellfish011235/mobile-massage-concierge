@@ -117,6 +117,7 @@ export function BookingWizard({ therapist }: Props) {
       quietSettingConfirmed: true as const,
       cleanSurfaceConfirmed: true as const,
       selectedAddOnIds: addOnIds,
+      maxAcceptedTotal: travelPreview.total,
     };
 
     const parsed = bookingRequestSchema.safeParse(raw);
@@ -375,7 +376,7 @@ export function BookingWizard({ therapist }: Props) {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-pom-sm text-muted-foreground">
-              {appointmentDateTime ? `${travelPreview.demandLabel}${travelPreview.demandPercent ? ` (+${travelPreview.demandPercent}% on session)` : ""}. Final price shown before submitting.` : "Choose a date and time to see applicable pricing."}
+              {appointmentDateTime ? `${travelPreview.demandLabel}${travelPreview.demandPercent ? ` (+${travelPreview.demandPercent}% on session)` : ""}. Price confirmed before submitting; if it increases, you must approve a new quote.` : "Choose a date and time to see applicable pricing."}
             </p>
             <ul className="space-y-2 text-pom-sm">
               {travelPreview.lineItems.map((line) => (
