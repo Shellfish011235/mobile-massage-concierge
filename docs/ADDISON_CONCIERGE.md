@@ -9,6 +9,16 @@
 - Conservative Betty SMS reply parser: unqualified YES / NO only. Qualified, ambiguous, or rescheduling responses require human review.
 - Displays Square / Zelle / Venmo / crypto as **nonfunctional previews**. Does not request payment or mark it complete.
 
+## In-apartment space check prototype
+- Client-facing `/addison/space-check` is linked from the Addison booking preview.
+- Optional camera/file input displays a photo locally via a browser object URL; the file is not uploaded or analyzed.
+- Clients enter **usable unobstructed floor dimensions** in feet, with configurable table dimensions and desired clearance in inches.
+- Provisional test assumptions are a 73 x 30 inch portable table and 30 inches of clearance on every side. These are examples only, not verified measurements for the actual table.
+- Evaluates both table orientations; returns a preliminary geometry fit only, not a safety or accessibility certification.
+- Future optional scanning: multi-photo photogrammetry/3D Gaussian splatting for visualization, LiDAR/RoomPlan on compatible iOS devices for measured dimensions, calibrated references where LiDAR is unavailable, obstacle segmentation and therapist final review.
+- No scan processing, upload, booking storage, or real-world automated space approval is currently active.
+- Before production: consent, privacy policy, retention/deletion, image sanitization, secure storage if user intentionally submits room images, accessibility, fallbacks and device compatibility.
+
 ## Commercial workflow (not connected yet)
 1. Client requests appointment; validate availability and quote on trusted server. Booking begins `pending_betty` for room or `awaiting_payment` for apartment, provided Addison rules permit.
 2. For room bookings, create durable pending request and assign a short opaque booking code. Obtain Betty's consent to use business SMS. Send the minimum needed information (time, duration, room) through a verified Twilio sender. Avoid client health details.
