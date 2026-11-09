@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { AddisonPaymentChoices } from "@/components/addison/payment-choices";
+import { AddisonBookingExtras } from "@/components/addison/booking-extras";
 import {
   bettyRoomRequestMessage,
   clientDeclinedMessage,
@@ -230,6 +231,7 @@ export default function AddisonConciergePage() {
               )}</>
           ) : <p className="text-sm">Choose a future date for the price preview.</p>}
         </div>
+        <AddisonBookingExtras location={location} />
         <label className="flex items-start gap-2 text-sm">
           <input type="checkbox" checked={policyAccepted} onChange={event => setPolicyAccepted(event.target.checked)} className="mt-1" />
           <span>I understand the $25 deposit is credited toward the service total; cancellations before the appointment date are eligible for a refund, and cancellations on the appointment date forfeit the deposit, subject to the written policy and law. The remaining balance is paid after service, with an optional tip.</span>
