@@ -1,11 +1,11 @@
 # Anam Beo / Addison launch checklist
 
-**Selected setup:** existing domain, existing Square business account, new dedicated business SMS number, installable mobile web app (PWA).
+**Selected setup:** NEW domain (not yet chosen or purchased), existing Square business account, new dedicated business SMS number, installable mobile web app (PWA).
 
 **Status:** development only. Do not publish as a live booking/payment system yet.
 
 ## First deployment
-1. Confirm the exact domain name and DNS provider, plus which subdomain should host bookings. Never ask for domain-account passwords.
+1. Select and explicitly approve purchase of a new domain. Vercel registration availability/pricing was checked on 2026-11-09 for anambeomassage.com, anambeobodywork.com, anambeoconcierge.com, and addisonmassageconcierge.com; availability/pricing may change. Never register or charge without user approval, and never request registrar passwords.
 2. Link the existing `Shellfish011235/mobile-massage-concierge` GitHub repository to a staging project in Vercel. Deploy feature PR to a preview environment first; do not merge or point public DNS until testing passes.
 3. Configure HTTPS and a verified custom domain through the hosting provider. Set strict staging access, then conduct independent privacy/accessibility checks.
 4. Verify `/addison`, `/addison/space-check` and `/manifest.webmanifest` on desktop/mobile. Installability depends on browser support and may require raster icons for best cross-device behavior.
