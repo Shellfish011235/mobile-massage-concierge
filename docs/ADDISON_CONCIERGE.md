@@ -1,5 +1,19 @@
 # Addison Massage Concierge — implementation plan and acceptance gates
 
+## Venue-scoped approval boundary (confirmed 2026-11-09)
+**The Addison Massage Concierge** is for clients at The Addison condominium on A1A in Boca Raton, Florida. Anam Beo Bodywork provides the services. This single venue's shared massage-room approval workflow is NOT a global feature for the broader mobile-massage marketplace or future SaaS tenants.
+
+| Request | Approval route |
+| --- | --- |
+| The Addison condominium, shared resident massage room | Betty approves or declines the room's use (then therapist schedule and deposit checks) |
+| The Addison condominium, resident's private apartment | Therapist/owner scheduling and availability; Betty is NOT contacted |
+| Any client elsewhere in Boca Raton, Palm Beach County, or any other location | Independent therapist/business booking route; Betty is NOT contacted |
+| Future third-party therapist, team, spa, condo or hotel | Their own venue/room administrator only if configured and authorized; otherwise therapist/business route |
+
+**Never infer that a booking belongs to The Addison from a text address or proximity to A1A.** The server must assign an authenticated, trusted venue ID and shared-room resource ID from the database, and tenant-scoped credentials must authorize any eventual Betty webhook/SMS. Betty's own phone is configured as a secret on the server only after her consent, never copied into public source. The default for an unknown or mismatched venue is **no Betty contact**. The Addison rates and the $25 policy must not be applied to other businesses automatically.
+
+Code policy: `src/lib/booking/approval-routing.ts`. The present `/addison` UI passes its known venue and selected room and remains a demo. Actual routing is NOT enabled until a backend authenticates the venue and enforces it server-side.
+
 ## What this branch implements
 - Dedicated `/addison` **local-only preview** and therapist Requests navigation link.
 - Isolated rates: Addison Resident Massage Room $100/hour weekdays before 5 PM, $120/hour weeknights/weekends; resident apartment $120/hour weekdays before 5 PM, $150/hour weeknights/weekends. Evening threshold (5 PM) is provisional.
