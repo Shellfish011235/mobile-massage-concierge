@@ -97,6 +97,7 @@ export default function TherapistHomePage() {
       </section>
 
       <section className="mt-10 grid grid-cols-1 gap-3">
+        <Link href="/demo/business" className="rounded-pom-xl border border-border bg-card p-4 text-sm font-medium text-primary underline">Shellfish Business POC · Interactive demo</Link>
         <Link href="/therapist/calendar" className="rounded-pom-xl border border-border bg-card p-4 text-sm font-medium text-primary underline">
           Calendar &amp; travel buffers
         </Link>
