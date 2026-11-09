@@ -64,6 +64,10 @@ export default function AddisonConciergePage() {
       <header className="space-y-2">
         <p className="text-sm uppercase tracking-wide text-muted-foreground">Anam Beo · Addison</p>
         <h1 className="font-serif text-3xl">Massage Concierge</h1>
+        <div className="rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm space-y-1" aria-label="Massage therapist credentials">
+          <p className="font-semibold">Florida Licensed Massage Therapist</p>
+          <p>License MA-28774 <span aria-hidden="true">·</span> Insured since 1999</p>
+        </div>
         <p className="text-muted-foreground">
           Preview the resident booking process. Massage room requests require Betty's approval.
           No booking, text, payment, or calendar invitation is sent from this demonstration.
