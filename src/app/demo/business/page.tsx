@@ -25,7 +25,7 @@ export default function BusinessProofOfConcept() {
   const [receipt,setReceipt]=useState<ReturnType<typeof makeDemoReceipt> | null>(null);
   const [sequence,setSequence]=useState(1);
   const decision=evaluateBusinessCase(input);
-  const change=<K extends keyof BusinessCase>(key:K,value:BusinessCase[K])=>{
+  const change=<K extends keyof BusinessCase,>(key:K,value:BusinessCase[K])=>{
     setInput(old=>({...old,[key]:value}));setReceipt(null);
   };
   const proof=()=>{
@@ -119,7 +119,7 @@ export default function BusinessProofOfConcept() {
       {receipt&&<>
         <pre className="max-h-96 overflow-auto whitespace-pre-wrap break-words rounded-lg bg-muted p-3 text-xs">{JSON.stringify(receipt,null,2)}</pre>
         <button type="button" className="rounded border px-3 py-2 text-sm"
-          onClick={()=>navigator.clipboard?.writeText(JSON.stringify(receipt,null,2))}>Copy receipt JSON</button>
+          onClick={()=>{if(navigator.clipboard) void navigator.clipboard.writeText(JSON.stringify(receipt,null,2));}}>Copy receipt JSON</button>
       </>}
       <p className="text-xs text-muted-foreground">
         Real receipts require signed authority, durable replay protection, server-side evidence, settlement verification,
