@@ -73,6 +73,16 @@ export default function AddisonConciergePage() {
           No booking, text, payment, or calendar invitation is sent from this demonstration.
         </p>
       </header>
+      <section className="rounded-lg border border-border bg-muted/40 p-4 space-y-2">
+        <h2 className="font-serif text-xl">Planning an in-apartment massage?</h2>
+        <p className="text-sm text-muted-foreground">
+          Preview your space with a photo and enter clear measurements to check
+          that the massage table and working area will fit.
+        </p>
+        <Link href="/addison/space-check" className="inline-block text-sm font-medium text-primary underline">
+          Check apartment space →
+        </Link>
+      </section>
       <div className="rounded-lg border p-5 space-y-4">
         <h2 className="text-xl font-medium">1. Client request</h2>
         <label className="block space-y-1">
