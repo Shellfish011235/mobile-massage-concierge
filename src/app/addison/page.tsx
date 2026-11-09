@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import {
   ADDISON_PAYMENT_OPTIONS,
+  addisonDepositBreakdown,
   classifyBettyReply,
   quoteAddison,
   type AddisonLocation,
@@ -31,6 +32,7 @@ export default function AddisonConciergePage() {
   const date = dateTime ? new Date(dateTime) : null;
   const validDate = !!date && !Number.isNaN(date.getTime()) && date.getTime() > Date.now();
   const quote = validDate ? quoteAddison({ appointmentIso: date!.toISOString(), durationMinutes: duration, location }) : null;
+  const deposit = quote ? addisonDepositBreakdown(quote.totalCents) : null;
 
   function request() {
     if (!validDate || !client.trim()) return;
@@ -101,7 +103,17 @@ export default function AddisonConciergePage() {
           {quote ? (
             <><p className="text-sm">{quote.label} · {usd(quote.rateCents)}/hour</p>
               <p className="text-2xl font-semibold">{usd(quote.totalCents)}</p>
-              <p className="text-xs text-muted-foreground">Proposed service price, before optional tip/fees. Final price is shown before payment.</p></>
+              <p className="text-xs text-muted-foreground">Proposed service price, before optional tip/fees. Final price is shown before payment.</p>
+              {deposit && (
+                <div className="mt-3 border-t pt-3 text-sm space-y-1">
+                  <p>Booking deposit: <strong>{usd(deposit.depositCents)}</strong> (credited toward massage)</p>
+                  <p>Remaining service balance: <strong>{usd(deposit.remainingCents)}</strong></p>
+                  <p className="text-xs text-muted-foreground">
+                    Cancel before the appointment date for a deposit refund.
+                    Same-day cancellations forfeit the $25 deposit.
+                  </p>
+                </div>
+              )}</>
           ) : <p className="text-sm">Choose a future date for the price preview.</p>}
         </div>
         <button disabled={!quote || !client.trim()} onClick={request}
@@ -149,8 +161,14 @@ export default function AddisonConciergePage() {
                   ? "Crypto requires a configured receiving wallet, locked quote, chain verification, and receipts."
                   : "Business payment instructions and manual verification are required before confirming payment."}
               </p>}
+              {deposit && <p className="text-sm">
+                Deposit due to reserve: <strong>{usd(deposit.depositCents)}</strong>.
+                Remaining massage balance: <strong>{usd(deposit.remainingCents)}</strong>.
+                The deposit is part of the quoted total, not an extra charge.
+              </p>}
               <p className="text-sm text-muted-foreground">
-                The real app must verify payment and create the Google Calendar event before issuing a final confirmation.
+                Same-day cancellations forfeit the $25 deposit. The real app must verify payment
+                and create the Google Calendar event before issuing a final confirmation.
               </p>
             </div>
           )}
