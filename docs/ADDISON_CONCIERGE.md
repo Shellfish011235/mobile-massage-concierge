@@ -7,7 +7,7 @@
 - Proposed $25 deposit collected only after booking approval, credited against service total. Cancel before the appointment date: refund deposit. Cancel on the same Addison-local calendar date as the appointment: $25 deposit is forfeited. This does not add $25 to the service price.
 - America/New_York calendar classification for weekday/weekend pricing.
 - Conservative Betty SMS reply parser: unqualified YES / NO only. Qualified, ambiguous, or rescheduling responses require human review.
-- Displays Square / Zelle / Venmo / crypto as **nonfunctional previews**. Does not request payment or mark it complete.
+- Displays a dedicated deposit-payment selection panel for Square/card, Zelle, Venmo, and cryptocurrency. Includes payment-specific setup status, $25 deposit and remaining balance, and a cancellation-term acknowledgment. **No transfers or checkouts are active.**
 
 ## In-apartment space check prototype
 - Client-facing `/addison/space-check` is linked from the Addison booking preview.
@@ -50,3 +50,12 @@
 - “Yes, but only until 3”; “Can she come later?”; “No, unavailable until 2” -> needs clarification.
 - Apartment skips Betty room-approval step but is **not** a final confirmed booking.
 - No external side effects occur from preview; dashboard and public-facing pages must not imply otherwise.
+
+
+## Payment-method activation checklist
+- Square: create/verify merchant account, use official server-side Square payment link/checkout API, calculate price from persisted booking, verify payment webhooks and idempotency, and record refunds. The existing Stripe placeholder is NOT Square and must never be reused as a live Addison checkout.
+- Zelle: confirm that your business bank account supports Zelle for business; provide only verified business recipient details, and manually reconcile transfers.
+- Venmo: use a valid Venmo business profile and confirmed payment reference; reconcile merchant transactions before marking a booking paid.
+- Crypto: determine supported tokens/networks, use a separate business receiving wallet without exposing signing keys, generate a per-invoice quote/expiry and reference (tag where needed), verify sufficient confirmations and actual asset, and log USD values for taxes.
+- No booking may move to confirmed status merely because the customer selected a method or clicked an outbound payment link.
+- Do not put payment access tokens, merchant credentials, or customer financial data into the public GitHub repository.
