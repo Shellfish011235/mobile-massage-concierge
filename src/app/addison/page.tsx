@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { AddisonPaymentChoices } from "@/components/addison/payment-choices";
 import { AddisonBookingExtras } from "@/components/addison/booking-extras";
+import { ADDISON_VENUE_ID, ADDISON_ROOM_RESOURCE_ID, chooseBookingApprovalRoute } from "@/lib/booking/approval-routing";
 import {
   bettyRoomRequestMessage,
   clientDeclinedMessage,
@@ -68,7 +69,11 @@ export default function AddisonConciergePage() {
 
   function request() {
     if (!readyToPreview) return;
-    setStatus(location === "massage_room" ? "pending_betty" : "awaiting_payment");
+    const route = chooseBookingApprovalRoute({
+      venueId: ADDISON_VENUE_ID,
+      resourceId: location === "massage_room" ? ADDISON_ROOM_RESOURCE_ID : null,
+    });
+    setStatus(route === "addison_betty_room_approval" ? "pending_betty" : "awaiting_payment");
     setBettyReply("");
     setDetail("");
     setApprovedTime(dateTime);
@@ -100,7 +105,7 @@ export default function AddisonConciergePage() {
           <p>License MA-28774 <span aria-hidden="true">·</span> Insured since 1999</p>
         </div>
         <p className="text-muted-foreground">
-          Preview the resident booking process. Massage room requests require Betty's approval.
+          Exclusively for The Addison condominium on A1A in Boca Raton. Only the shared resident massage room requires Betty's approval; apartment visits are coordinated directly with the therapist.
           No booking, text, payment, or calendar invitation is sent from this demonstration.
         </p>
       </header>
