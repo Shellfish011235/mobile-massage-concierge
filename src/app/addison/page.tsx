@@ -92,8 +92,8 @@ export default function AddisonConciergePage() {
     <main className="mx-auto max-w-2xl space-y-6 px-5 py-12">
       <Link href="/" className="text-sm underline">Home</Link>
       <header className="space-y-2">
-        <p className="text-sm uppercase tracking-wide text-muted-foreground">Anam Beo · Addison</p>
-        <h1 className="font-serif text-3xl">Massage Concierge</h1>
+        <p className="text-sm uppercase tracking-wide text-muted-foreground">Massage services by Anam Beo Bodywork</p>
+        <h1 className="font-serif text-3xl">The Addison Massage Concierge</h1>
         <div className="rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm space-y-1" aria-label="Massage therapist credentials">
           <p className="font-semibold">Florida Licensed Massage Therapist</p>
           <p>License MA-28774 <span aria-hidden="true">·</span> Insured since 1999</p>
