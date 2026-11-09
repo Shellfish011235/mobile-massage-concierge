@@ -7,7 +7,7 @@ const DEFAULT_TABLE_LENGTH_IN = 73;
 const DEFAULT_TABLE_WIDTH_IN = 30;
 const DEFAULT_CLEARANCE_IN = 30;
 
-export function roomFit(input: {
+function roomFit(input: {
   openLengthIn: number;
   openWidthIn: number;
   tableLengthIn: number;
