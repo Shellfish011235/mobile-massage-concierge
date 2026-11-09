@@ -26,6 +26,7 @@ export function TravelBookingSimulator() {
   const [travelAfter, setTravelAfter] = useState("30");
   const [message, setMessage] = useState("");
   const [selected, setSelected] = useState<string>("new");
+  const [nextId, setNextId] = useState(1);
 
   function run(type: "accept" | "move") {
     try {
@@ -35,7 +36,7 @@ export function TravelBookingSimulator() {
         throw new Error("Session duration must be 15–480 minutes");
       const visit: MobileVisit = {
         ...SCOPE,
-        id: type === "move" ? selected : "PREVIEW-" + (visits.length + 1),
+        id: type === "move" ? selected : "PREVIEW-" + nextId,
         startIso, endIso,
         travelBeforeMinutes: Number(travelBefore), setupMinutes: Number(setup),
         teardownMinutes: Number(teardown), travelAfterMinutes: Number(travelAfter),
@@ -43,6 +44,7 @@ export function TravelBookingSimulator() {
       const result = reconcileMobileVisit(visits, { type, visit });
       if (!result.ok) { setMessage("Not added: " + result.error); return; }
       setVisits(result.visits);
+      if (type === "accept") setNextId(id => id + 1);
       setSelected("new");
       setMessage(type === "move"
         ? "Moved in this browser preview. Travel blocks recalculated."
