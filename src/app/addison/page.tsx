@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { AddisonPaymentChoices } from "@/components/addison/payment-choices";
 import {
-  ADDISON_PAYMENT_OPTIONS,
   addisonDepositBreakdown,
   classifyBettyReply,
   quoteAddison,
@@ -28,7 +28,6 @@ export default function AddisonConciergePage() {
   const [detail, setDetail] = useState("");
   const [status, setStatus] = useState<AddisonRequestStatus | null>(null);
   const [approvedTime, setApprovedTime] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("");
   const date = dateTime ? new Date(dateTime) : null;
   const validDate = !!date && !Number.isNaN(date.getTime()) && date.getTime() > Date.now();
   const quote = validDate ? quoteAddison({ appointmentIso: date!.toISOString(), durationMinutes: duration, location }) : null;
@@ -39,7 +38,6 @@ export default function AddisonConciergePage() {
     setStatus(location === "massage_room" ? "pending_betty" : "awaiting_payment");
     setBettyReply("");
     setDetail("");
-    setPaymentMethod("");
     setApprovedTime(dateTime);
   }
 
@@ -160,26 +158,10 @@ export default function AddisonConciergePage() {
           {status === "awaiting_payment" && (
             <div className="space-y-3">
               <p>Room approval is recorded in the demo; select a payment method to preview the next step.</p>
-              <div className="flex flex-wrap gap-2">
-                {ADDISON_PAYMENT_OPTIONS.map((method) => (
-                  <button key={method.id} onClick={() => setPaymentMethod(method.id)}
-                    className={`rounded border px-3 py-2 ${paymentMethod === method.id ? "border-primary font-semibold" : ""}`}>
-                    {method.label}
-                  </button>
-                ))}
-              </div>
-              {paymentMethod && <p className="rounded bg-muted p-3 text-sm">
-                {paymentMethod === "square"
-                  ? "Square Checkout integration requires server-side pricing, verified payment webhooks, and configured credentials."
-                  : paymentMethod === "crypto"
-                  ? "Crypto requires a configured receiving wallet, locked quote, chain verification, and receipts."
-                  : "Business payment instructions and manual verification are required before confirming payment."}
-              </p>}
-              {deposit && <p className="text-sm">
-                Deposit due to reserve: <strong>{usd(deposit.depositCents)}</strong>.
-                Remaining massage balance: <strong>{usd(deposit.remainingCents)}</strong>.
-                The deposit is part of the quoted total, not an extra charge.
-              </p>}
+              {deposit && <AddisonPaymentChoices
+                depositCents={deposit.depositCents}
+                remainingCents={deposit.remainingCents}
+              />}
               <p className="text-sm text-muted-foreground">
                 Same-day cancellations forfeit the $25 deposit. The real app must verify payment
                 and create the Google Calendar event before issuing a final confirmation.
