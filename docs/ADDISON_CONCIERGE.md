@@ -4,6 +4,7 @@
 - Dedicated `/addison` **local-only preview** and therapist Requests navigation link.
 - Isolated rates: Addison Resident Massage Room $100/hour weekdays before 5 PM, $120/hour weeknights/weekends; resident apartment $120/hour weekdays before 5 PM, $150/hour weeknights/weekends. Evening threshold (5 PM) is provisional.
 - Duration 60 / 90 / 120 minutes, priced in integer cents.
+- Proposed $25 deposit collected only after booking approval, credited against service total. Cancel before the appointment date: refund deposit. Cancel on the same Addison-local calendar date as the appointment: $25 deposit is forfeited. This does not add $25 to the service price.
 - America/New_York calendar classification for weekday/weekend pricing.
 - Conservative Betty SMS reply parser: unqualified YES / NO only. Qualified, ambiguous, or rescheduling responses require human review.
 - Displays Square / Zelle / Venmo / crypto as **nonfunctional previews**. Does not request payment or mark it complete.
@@ -15,7 +16,7 @@
 4. Do not assume silence is approval. Enforce timeouts and owner escalation. Do not create confirmed room availability without Betty's actual approval.
 5. Recheck therapist schedule for overlaps and hold the slot before taking payment. Make Google Calendar synchronization idempotent, and preserve errors/retry without double booking.
 6. For Square, create a server-generated hosted checkout with the saved, immutable price snapshot, verified webhook, and payment reconciliation. Zelle/Venmo are manual reconciliation until official supported business integrations exist. Crypto payments require a dedicated receiving wallet, exchange quote expiry, destination/tag, validated settlement and USD/tax receipts. Never ask for or store private keys.
-7. Send client confirmation only after room approval (where required), payment condition, and calendar creation have all passed. Provide cancel/reschedule and refund policy handling.
+7. Send client confirmation only after room approval (where required), payment condition, and calendar creation have all passed. Show and record affirmative consent to the $25 deposit/cancellation terms before checkout. For a same-day cancellation, retain the deposit only if contract and applicable law permit; otherwise refund appropriately. Earlier cancellations refund the deposit. For cancellations initiated by the business, refund the deposit. Rescheduling/no-show/other exceptions require explicit reviewed terms.
 8. Protect customer contact details using signed-in owner roles and row-level security. Do not disclose sensitive client details to Betty. Record consent, event log, invoice and payment status separately.
 
 ## Outstanding configuration before activation
@@ -24,13 +25,17 @@
 - Google Calendar OAuth and specific calendar ID (do not request Betty's primary calendar).
 - Square account, payment webhook, environment configuration and verified checkout; alternative payment business identifiers.
 - Booking persistence schema and RLS, paid/pending/cancelled state machine, access controls, tests, monitoring.
-- Evening start hour (currently provisional 5 PM), tax/tip, cancellations, deposits, lead times, location-specific rules.
+- Evening start hour (currently provisional 5 PM), tax/tip, cancellation terms and refund exceptions, lead times, location-specific rules.
 - Review PROJECT-BOUNDARIES.md before any live commercial activation. No secrets in Git.
 
 ## Manual preview test matrix
 - Weekday 10:00 AM room: 60m $100, 90m $150, 120m $200.
 - Weekday 10:00 AM apartment: $120, $180, $240.
-- Weekday 5:00 PM, Saturday, Sunday, Addison Resident Massage Room: $120, $180, $240.\n- Weekday 5:00 PM, Saturday, Sunday, apartment: $150, $225, $300.
+- Weekday 5:00 PM, Saturday, Sunday, Addison Resident Massage Room: $120, $180, $240.
+- Weekday 5:00 PM, Saturday, Sunday, apartment: $150, $225, $300.
+- On $100 session: $25 deposit, $75 remaining; on $120 session: $25 deposit, $95 remaining.
+- Same-day cancellation means same America/New_York calendar date, not a rolling 24-hour window. Early cancellation: refund deposit; same-day: deposit retained subject to published terms and law.
+- The existing prototype does not charge, refund, confirm payment, or perform a cancellation.
 - YES / Yes. -> pending payment; NO -> declined.
 - “Yes, but only until 3”; “Can she come later?”; “No, unavailable until 2” -> needs clarification.
 - Apartment skips Betty room-approval step but is **not** a final confirmed booking.
