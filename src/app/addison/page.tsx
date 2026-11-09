@@ -4,6 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { AddisonPaymentChoices } from "@/components/addison/payment-choices";
 import {
+  bettyRoomRequestMessage,
+  clientDeclinedMessage,
+  clientDepositRequestMessage,
+  clientRequestReceivedMessage,
+  chooseNotificationChannel,
+  type AddisonNotificationChannel,
+} from "@/lib/addison/notifications";
+import {
   addisonDepositBreakdown,
   classifyBettyReply,
   quoteAddison,
@@ -27,6 +35,11 @@ export default function AddisonConciergePage() {
   const [duration, setDuration] = useState<60 | 90 | 120>(60);
   const [dateTime, setDateTime] = useState("");
   const [client, setClient] = useState("");
+  const [clientPhone, setClientPhone] = useState("");
+  const [clientEmail, setClientEmail] = useState("");
+  const [notificationChannel, setNotificationChannel] = useState<AddisonNotificationChannel>("email");
+  const [smsConsent, setSmsConsent] = useState(false);
+  const [policyAccepted, setPolicyAccepted] = useState(false);
   const [bettyReply, setBettyReply] = useState("");
   const [detail, setDetail] = useState("");
   const [status, setStatus] = useState<AddisonRequestStatus | null>(null);
@@ -35,6 +48,17 @@ export default function AddisonConciergePage() {
   const validDate = !!date && !Number.isNaN(date.getTime()) && date.getTime() > Date.now();
   const quote = validDate ? quoteAddison({ appointmentIso: date!.toISOString(), durationMinutes: duration, location }) : null;
   const deposit = quote ? addisonDepositBreakdown(quote.totalCents) : null;
+  const canContact = notificationChannel === "email"
+    ? /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(clientEmail.trim())
+    : smsConsent && /^\\+?1?\\d{10}$/.test(clientPhone.replace(/[\\s().-]/g, ""));
+  const readyToPreview = !!quote && !!client.trim() && canContact && policyAccepted;
+  const demoBooking = quote && validDate ? {
+    reference: "DEMO-ONLY", appointmentIso: date!.toISOString(), durationMinutes: duration,
+    location, totalCents: quote.totalCents, clientFirstName: client.trim().split(" ")[0] || "Client",
+  } : null;
+  const demoChannel = demoBooking && canContact ? chooseNotificationChannel({
+    email: clientEmail.trim(), phone: clientPhone.trim(), smsConsent, preference: notificationChannel,
+  }) : null;
   // Optional guidance only: 73 × 30 inch table and 30 inches of working clearance on each side.
   const lengthIn = Number(clearLengthFt) * 12;
   const widthIn = Number(clearWidthFt) * 12;
@@ -43,7 +67,7 @@ export default function AddisonConciergePage() {
   const spaceFits = validSpace && ((lengthIn >= 133 && widthIn >= 90) || (widthIn >= 133 && lengthIn >= 90));
 
   function request() {
-    if (!validDate || !client.trim()) return;
+    if (!readyToPreview) return;
     setStatus(location === "massage_room" ? "pending_betty" : "awaiting_payment");
     setBettyReply("");
     setDetail("");
@@ -87,6 +111,31 @@ export default function AddisonConciergePage() {
           <input className="w-full rounded border bg-background p-3" value={client}
             onChange={(e) => setClient(e.target.value)} placeholder="Example client" />
         </label>
+        <section className="space-y-3 rounded-lg border p-4" aria-label="Client confirmation preferences">
+          <h3 className="text-sm font-semibold">Where should we send your booking updates?</h3>
+          <p className="text-xs text-muted-foreground">Choose email or text. We only send a final confirmation once your booking is approved and the $25 deposit is verified.</p>
+          <div className="flex gap-5 text-sm">
+            <label className="flex items-center gap-2"><input type="radio" name="notification-channel" checked={notificationChannel === "email"} onChange={() => setNotificationChannel("email")} />Email</label>
+            <label className="flex items-center gap-2"><input type="radio" name="notification-channel" checked={notificationChannel === "sms"} onChange={() => setNotificationChannel("sms")} />Text message</label>
+          </div>
+          {notificationChannel === "email" ? (
+            <label className="block space-y-1 text-sm"><span>Client email address</span>
+              <input type="email" autoComplete="email" className="w-full rounded border bg-background p-3" value={clientEmail}
+                onChange={event => setClientEmail(event.target.value)} placeholder="client@example.com" />
+            </label>
+          ) : (
+            <>
+              <label className="block space-y-1 text-sm"><span>Client mobile number</span>
+                <input type="tel" autoComplete="tel" className="w-full rounded border bg-background p-3" value={clientPhone}
+                  onChange={event => setClientPhone(event.target.value)} placeholder="(555) 555-1234" />
+              </label>
+              <label className="flex items-start gap-2 text-sm"><input type="checkbox" className="mt-1"
+                checked={smsConsent} onChange={event => setSmsConsent(event.target.checked)} />
+                <span>I agree to receive appointment-related text messages from Anam Beo Bodywork. Message/data rates may apply; reply STOP to opt out. Consent is not required to purchase; email is available instead.</span>
+              </label>
+            </>
+          )}
+        </section>
         <div className="space-y-2">
           <p className="text-sm">Massage location</p>
           <div className="flex flex-wrap gap-2">
@@ -182,26 +231,41 @@ export default function AddisonConciergePage() {
               )}</>
           ) : <p className="text-sm">Choose a future date for the price preview.</p>}
         </div>
-        <button disabled={!quote || !client.trim()} onClick={request}
-          className="rounded bg-primary px-5 py-3 text-primary-foreground disabled:opacity-40">Simulate booking request</button>
+        <label className="flex items-start gap-2 text-sm">
+          <input type="checkbox" checked={policyAccepted} onChange={event => setPolicyAccepted(event.target.checked)} className="mt-1" />
+          <span>I understand the $25 deposit is credited toward the service total; cancellations before the appointment date are eligible for a refund, and cancellations on the appointment date forfeit the deposit, subject to the written policy and law. The remaining balance is paid after service, with an optional tip.</span>
+        </label>
+        <button disabled={!readyToPreview} onClick={request}
+          className="rounded bg-primary px-5 py-3 text-primary-foreground disabled:opacity-40">Preview booking request (no messages sent)</button>
       </div>
 
       {status && (
         <section className="rounded-lg border p-5 space-y-4">
           <h2 className="text-xl font-medium">2. Approval status</h2>
           <p className="font-semibold">{status.replaceAll("_", " ")}</p>
+          {demoBooking && (
+            <div className="rounded bg-muted p-3 text-sm space-y-2" aria-live="polite">
+              <p><strong>Client update via {demoChannel} (preview only):</strong> {clientRequestReceivedMessage(demoBooking)}</p>
+              {status === "declined" && <p><strong>Not available:</strong> {clientDeclinedMessage(demoBooking)}</p>}
+              {status === "awaiting_payment" && (
+                <p><strong>Next step:</strong> The client would receive a secure Square deposit link only after availability is approved. After verified payment and calendar creation, they would receive a confirmed booking with the balance, optional tip and cancellation terms.</p>
+              )}
+            </div>
+          )}
           {status === "pending_betty" || status === "needs_clarification" ? (
             <>
               <p className="text-sm text-muted-foreground">
-                Betty's calendar remains authoritative. An SMS integration would request the room
-                for {approvedTime}, {duration} minutes. Betty can reply normally.
+                Betty's calendar remains authoritative. The production workflow will text her first,
+                wait for an authenticated YES or NO reply associated with this booking, and notify Michele.
+                No automatic approval is inferred from silence or conditional replies.
               </p>
+              {demoBooking && <p className="rounded bg-muted p-3 text-sm"><strong>Text to Betty (preview only):</strong> {bettyRoomRequestMessage(demoBooking)}</p>}
               <label className="block space-y-1">
-                <span className="text-sm">Simulate Betty's reply</span>
+                <span className="text-sm">Try a sample Betty reply (demo only)</span>
                 <textarea className="w-full rounded border bg-background p-3" value={bettyReply}
                   onChange={(e) => setBettyReply(e.target.value)} placeholder="Yes / No / Yes, but only until 3" />
               </label>
-              <button onClick={handleBettyReply} className="rounded border px-4 py-2">Interpret reply</button>
+              <button onClick={handleBettyReply} className="rounded border px-4 py-2">Preview response handling</button>
             </>
           ) : null}
           {detail && <p className="rounded bg-muted p-3 text-sm">{detail}</p>}
@@ -211,7 +275,7 @@ export default function AddisonConciergePage() {
           {status === "declined" && <button onClick={() => setStatus(null)} className="rounded border px-4 py-2">Choose another time</button>}
           {status === "awaiting_payment" && (
             <div className="space-y-3">
-              <p>Room approval is recorded in the demo; select a payment method to preview the next step.</p>
+              <p>Availability is approved in this simulation only. A real client will receive a secure $25 deposit request after Betty approves; the appointment is not confirmed until payment is verified and the calendar event is created.</p>
               {deposit && <AddisonPaymentChoices
                 depositCents={deposit.depositCents}
                 remainingCents={deposit.remainingCents}
