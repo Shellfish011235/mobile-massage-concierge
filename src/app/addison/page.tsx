@@ -6,7 +6,6 @@ import { AddisonPaymentChoices } from "@/components/addison/payment-choices";
 import {
   bettyRoomRequestMessage,
   clientDeclinedMessage,
-  clientDepositRequestMessage,
   clientRequestReceivedMessage,
   chooseNotificationChannel,
   type AddisonNotificationChannel,
@@ -49,8 +48,8 @@ export default function AddisonConciergePage() {
   const quote = validDate ? quoteAddison({ appointmentIso: date!.toISOString(), durationMinutes: duration, location }) : null;
   const deposit = quote ? addisonDepositBreakdown(quote.totalCents) : null;
   const canContact = notificationChannel === "email"
-    ? /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(clientEmail.trim())
-    : smsConsent && /^\\+?1?\\d{10}$/.test(clientPhone.replace(/[\\s().-]/g, ""));
+    ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientEmail.trim())
+    : smsConsent && /^\+?1?\d{10}$/.test(clientPhone.replace(/[\s().-]/g, ""));
   const readyToPreview = !!quote && !!client.trim() && canContact && policyAccepted;
   const demoBooking = quote && validDate ? {
     reference: "DEMO-ONLY", appointmentIso: date!.toISOString(), durationMinutes: duration,
