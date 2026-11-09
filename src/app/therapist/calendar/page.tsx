@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { TravelBookingSimulator } from "@/components/therapist/travel-booking-simulator";
 import { useState } from "react";
 import { travelArrivalBlock, privateBusyCalendarEvent } from "@/lib/booking/travel-buffers";
 
@@ -123,6 +124,7 @@ export default function TherapistCalendarPage() {
           budget limits and privacy review.
         </p>
       </section>
+      <TravelBookingSimulator />
       <Link href="/therapist" className="inline-block text-sm font-medium text-primary underline">
         Back to therapist home
       </Link>
