@@ -77,7 +77,7 @@ export default function AddisonConciergePage() {
         <div className="space-y-2">
           <p className="text-sm">Massage location</p>
           <div className="flex flex-wrap gap-2">
-            {([["massage_room", "Addison massage room"], ["apartment", "Resident apartment"]] as const).map(([value, label]) => (
+            {([["massage_room", "Addison Resident Massage Room"], ["apartment", "Resident apartment"]] as const).map(([value, label]) => (
               <button key={value} className={`rounded border px-3 py-2 ${location === value ? "border-primary font-semibold" : ""}`}
                 onClick={() => {setLocation(value); setStatus(null);}}>{label}</button>
             ))}
