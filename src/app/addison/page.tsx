@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Flower2, ShieldCheck } from "lucide-react";
 import { AddisonPaymentChoices } from "@/components/addison/payment-choices";
 import { AddisonBookingExtras } from "@/components/addison/booking-extras";
 import { ADDISON_VENUE_ID, ADDISON_ROOM_RESOURCE_ID, chooseBookingApprovalRoute } from "@/lib/booking/approval-routing";
@@ -95,21 +96,29 @@ export default function AddisonConciergePage() {
   }
 
   return (
-    <main className="mx-auto max-w-2xl space-y-6 px-5 py-12">
-      <Link href="/" className="text-sm underline">Home</Link>
-      <header className="space-y-2">
-        <p className="text-sm uppercase tracking-wide text-muted-foreground">Massage services by Anam Beo Bodywork</p>
-        <h1 className="font-serif text-3xl">The Addison Massage Concierge</h1>
-        <div className="rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm space-y-1" aria-label="Massage therapist credentials">
-          <p className="font-semibold">Florida Licensed Massage Therapist</p>
-          <p>License MA-28774 <span aria-hidden="true">·</span> Insured since 1999</p>
+    <main className="addison-shell space-y-7">
+      <Link href="/" className="addison-home underline underline-offset-4">← Home</Link>
+      <header>
+        <div className="addison-brand">
+          <div className="addison-brand-inner">
+            <div className="addison-insignia" aria-hidden="true"><Flower2 size={25} strokeWidth={1.6}/></div>
+            <p className="addison-overline">ANAM BEO · THE ADDISON</p>
+            <h1 className="addison-heading">Massage Concierge</h1>
+            <p className="addison-credential">Florida Licensed Massage Therapist</p>
+            <p className="addison-credential-small">License MA-28774</p>
+            <p className="addison-insured"><ShieldCheck size={16} strokeWidth={1.6}/><span>Insured since 1999</span></p>
+          </div>
         </div>
-        <p className="text-muted-foreground">
-          Exclusively for The Addison condominium on A1A in Boca Raton. Only the shared resident massage room requires Betty's approval; apartment visits are coordinated directly with the therapist.
-          No booking, text, payment, or calendar invitation is sent from this demonstration.
+        <p className="addison-intro">
+          Private resident massage appointments at The Addison condominium on A1A in Boca Raton,
+          provided by Anam Beo Bodywork. Shared massage room requests require Betty’s approval;
+          private apartment visits are coordinated directly with your therapist.
+        </p>
+        <p className="addison-intro addison-status">
+          Booking preview only — no text messages, payments, or calendar invitations are sent.
         </p>
       </header>
-      <div className="rounded-lg border p-5 space-y-4">
+      <div className="addison-panel space-y-4">
         <h2 className="text-xl font-medium">1. Client request</h2>
         <label className="block space-y-1">
           <span className="text-sm">Client name (demo only)</span>
@@ -246,7 +255,7 @@ export default function AddisonConciergePage() {
       </div>
 
       {status && (
-        <section className="rounded-lg border p-5 space-y-4">
+        <section className="addison-panel space-y-4">
           <h2 className="text-xl font-medium">2. Approval status</h2>
           <p className="font-semibold">{status.replaceAll("_", " ")}</p>
           {demoBooking && (
@@ -294,7 +303,7 @@ export default function AddisonConciergePage() {
           )}
         </section>
       )}
-      <p className="text-xs text-muted-foreground">
+      <p className="addison-intro text-xs">
         Prototype only. No customer data is persisted here. Actual SMS, payment verification,
         calendar sync, consent and legal review remain inactive.
       </p>
