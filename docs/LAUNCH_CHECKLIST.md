@@ -1,5 +1,13 @@
 # Anam Beo / Addison launch checklist
 
+## Verified launch-state checkpoint (2026-11-09)
+- Vercel registration order `01M70GNRKX4678KWD8890558VZ` for `addisonmassageconcierge.com` returned `failed / payment-failed`. Domain NOT registered in Vercel's list; investigate billing before a new purchase to avoid duplicate attempts.
+- Created Vercel project `addison-massage-concierge` under `michele-fishers-projects`, ID `prj_7QMpaxlKJ9jhoL9y63DT8PZfX3Mp`, with all deployments covered by Vercel Authentication.
+- Project currently reports `live=false`, zero deployments and zero domains. Verify Git integration and run protected staging build before production. No public launch or DNS attachment yet.
+- Feature code remains in GitHub draft PR #2; Square, SMS and booking persistence are still disabled.
+- Do not disable deployment protection, merge the draft, accept real bookings, or attach a live public domain until end-to-end checks and payment reconciliation pass.
+
+
 **Selected setup:** NEW domain (not yet chosen or purchased), existing Square business account, new dedicated business SMS number, installable mobile web app (PWA).
 
 **Status:** development only. Do not publish as a live booking/payment system yet.
