@@ -14,6 +14,31 @@ export type AddisonRequestStatus =
 
 export const ADDISON_ZONE = "America/New_York";
 export const ADDISON_EVENING_HOUR = 17;
+export const ADDISON_DEPOSIT_CENTS = 2500;
+
+/**
+ * The $25 booking deposit is a credit toward the service total, not an added fee.
+ * Same-day means the local calendar date of the appointment in America/New_York.
+ * Earlier cancellations refund the deposit; same-day cancellations forfeit it.
+ * No-show and exceptional circumstances require a separate written policy.
+ */
+export function addisonDepositBreakdown(totalCents: number) {
+  const depositCents = Math.min(totalCents, ADDISON_DEPOSIT_CENTS);
+  return { depositCents, remainingCents: totalCents - depositCents, totalCents };
+}
+
+export function isAddisonSameDayCancellation(appointmentIso: string, cancellationIso: string): boolean {
+  const localDate = (iso: string) => new Intl.DateTimeFormat("en-CA", {
+    timeZone: ADDISON_ZONE, year: "numeric", month: "2-digit", day: "2-digit",
+  }).format(new Date(iso));
+  const appointment = new Date(appointmentIso);
+  const cancellation = new Date(cancellationIso);
+  if (!Number.isFinite(appointment.getTime()) || !Number.isFinite(cancellation.getTime())) {
+    throw new Error("Invalid cancellation or appointment date");
+  }
+  return localDate(appointmentIso) === localDate(cancellationIso);
+}
+
 
 export function addisonLocalParts(iso: string) {
   const date = new Date(iso);
