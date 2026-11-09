@@ -1,0 +1,140 @@
+/*
+ * The Addison presentation: intentionally scoped so it cannot change the
+ * nationwide therapist marketplace or its routing/booking behavior.
+ * Visual baseline: deep green concierge card, gold insignia, dark canvas.
+ */
+.addison-luxury {
+  --addison-ink: #f5f3eb;
+  --addison-gold: #d6c48c;
+  --addison-panel: #193e35;
+  --addison-line: rgba(214,196,140,.25);
+  min-height: 100vh;
+  color: var(--addison-ink);
+  background: radial-gradient(circle at 50% 0%, #142820 0%, #090f0e 44%, #070908 100%);
+  font-family: var(--font-dm-sans), Arial, sans-serif;
+}
+.addison-luxury .addison-shell {
+  width: min(100%, 780px);
+  margin: 0 auto;
+  padding: 30px 18px 80px;
+}
+.addison-luxury .addison-brand {
+  border: 1px solid var(--addison-line);
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(5,10,9,.48);
+}
+.addison-luxury .addison-brand-inner {
+  background: var(--addison-panel);
+  border-radius: 13px;
+  padding: 30px 22px 32px;
+  text-align: center;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+}
+.addison-luxury .addison-insignia {
+  display: flex;
+  justify-content: center;
+  color: var(--addison-gold);
+  margin: 0 auto 12px;
+}
+.addison-luxury .addison-overline {
+  color: var(--addison-gold);
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.addison-luxury .addison-heading {
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 600;
+  letter-spacing: -.03em;
+  line-height: 1.2;
+  margin: 8px 0 14px;
+  color: #fff;
+}
+.addison-luxury .addison-credential {
+  color: #f1f5f0;
+  font-size: 15px;
+  line-height: 1.8;
+}
+.addison-luxury .addison-credential-small {
+  color: #f1f5f0;
+  font-size: 13px;
+  margin-top: 6px;
+}
+.addison-luxury .addison-insured {
+  color: var(--addison-gold);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  margin-top: 9px;
+  font-size: 13px;
+}
+.addison-luxury .addison-insured span { color: #f1f5f0; }
+.addison-luxury .addison-intro {
+  color: #b9c8c2;
+  text-align: center;
+  max-width: 580px;
+  margin: 17px auto 0;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.addison-luxury .addison-panel {
+  border: 1px solid var(--addison-line);
+  border-radius: 16px;
+  background: #13251f;
+  box-shadow: 0 14px 40px rgba(0,0,0,.15);
+  padding: clamp(18px, 4vw, 28px);
+}
+.addison-luxury .addison-panel h2 {
+  color: #eee7d2;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 29px;
+  line-height: 1.15;
+}
+.addison-luxury .addison-panel h3 { color: #e5dfcf; }
+.addison-luxury .addison-panel label,
+.addison-luxury .addison-panel p,
+.addison-luxury .addison-panel span { line-height: 1.55; }
+.addison-luxury .addison-panel .text-muted-foreground,
+.addison-luxury .addison-panel .text-xs.text-muted-foreground,
+.addison-luxury .addison-panel .text-sm.text-muted-foreground { color: #b8c6bf; }
+.addison-luxury .addison-panel input:not([type="checkbox"]):not([type="radio"]),
+.addison-luxury .addison-panel textarea,
+.addison-luxury .addison-panel select {
+  background: #0e1c17;
+  color: #f8f7f0;
+  border-color: #476058;
+  border-radius: 9px;
+  color-scheme: dark;
+}
+.addison-luxury .addison-panel input::placeholder,
+.addison-luxury .addison-panel textarea::placeholder { color: #a5b5ad; }
+.addison-luxury .addison-panel input[type="checkbox"],
+.addison-luxury .addison-panel input[type="radio"] { accent-color: #cdb67b; }
+.addison-luxury .addison-panel button {
+  border-radius: 9px;
+  border-color: #627368;
+}
+.addison-luxury .addison-panel button.bg-primary {
+  background: #d7c28e;
+  color: #13251f;
+  font-weight: 700;
+}
+.addison-luxury .addison-panel button:disabled { opacity: .5; }
+.addison-luxury .addison-panel .bg-muted,
+.addison-luxury .addison-panel .bg-muted\/30,
+.addison-luxury .addison-panel .bg-muted\/40 { background: #223b32; color: #f5f3eb; }
+.addison-luxury .addison-panel .border,
+.addison-luxury .addison-panel .border-t { border-color: #465f56; }
+.addison-luxury .addison-panel .text-primary,
+.addison-luxury .addison-panel a { color: #e4d19f; }
+.addison-luxury .addison-home { color: #d6c48c; font-size: 13px; }
+.addison-luxury .addison-status { color: #bbd6c6; }
+.addison-luxury a:focus-visible,
+.addison-luxury button:focus-visible,
+.addison-luxury input:focus-visible { outline: 2px solid #e5c889; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .addison-luxury * { scroll-behavior: auto; }
+}

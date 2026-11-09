@@ -1,0 +1,75 @@
+# Addison Massage Concierge — implementation plan and acceptance gates
+
+## Venue-scoped approval boundary (confirmed 2026-11-09)
+**The Addison Massage Concierge** is for clients at The Addison condominium on A1A in Boca Raton, Florida. Anam Beo Bodywork provides the services. This single venue's shared massage-room approval workflow is NOT a global feature for the broader mobile-massage marketplace or future SaaS tenants.
+
+| Request | Approval route |
+| --- | --- |
+| The Addison condominium, shared resident massage room | Betty approves or declines the room's use (then therapist schedule and deposit checks) |
+| The Addison condominium, resident's private apartment | Therapist/owner scheduling and availability; Betty is NOT contacted |
+| Any client elsewhere in Boca Raton, Palm Beach County, or any other location | Independent therapist/business booking route; Betty is NOT contacted |
+| Future third-party therapist, team, spa, condo or hotel | Their own venue/room administrator only if configured and authorized; otherwise therapist/business route |
+
+**Never infer that a booking belongs to The Addison from a text address or proximity to A1A.** The server must assign an authenticated, trusted venue ID and shared-room resource ID from the database, and tenant-scoped credentials must authorize any eventual Betty webhook/SMS. Betty's own phone is configured as a secret on the server only after her consent, never copied into public source. The default for an unknown or mismatched venue is **no Betty contact**. The Addison rates and the $25 policy must not be applied to other businesses automatically.
+
+Code policy: `src/lib/booking/approval-routing.ts`. The present `/addison` UI passes its known venue and selected room and remains a demo. Actual routing is NOT enabled until a backend authenticates the venue and enforces it server-side.
+
+## What this branch implements
+- Dedicated `/addison` **local-only preview** and therapist Requests navigation link.
+- Isolated rates: Addison Resident Massage Room $100/hour weekdays before 5 PM, $120/hour weeknights/weekends; resident apartment $120/hour weekdays before 5 PM, $150/hour weeknights/weekends. Evening threshold (5 PM) is provisional.
+- Duration 60 / 90 / 120 minutes, priced in integer cents.
+- Proposed $25 deposit collected only after booking approval, credited against service total. Cancel before the appointment date: refund deposit. Cancel on the same Addison-local calendar date as the appointment: $25 deposit is forfeited. This does not add $25 to the service price.
+- America/New_York calendar classification for weekday/weekend pricing.
+- Conservative Betty SMS reply parser: unqualified YES / NO only. Qualified, ambiguous, or rescheduling responses require human review.
+- Displays a dedicated deposit-payment selection panel for Square/card, Zelle, Venmo, and cryptocurrency. Includes payment-specific setup status, $25 deposit and remaining balance, and a cancellation-term acknowledgment. **No transfers or checkouts are active.**
+
+## In-apartment space check prototype
+- Client-facing `/addison/space-check` is linked from the Addison booking preview.
+- Optional camera/file input displays a photo locally via a browser object URL; the file is not uploaded or analyzed.
+- Clients enter **usable unobstructed floor dimensions** in feet, with configurable table dimensions and desired clearance in inches.
+- Provisional test assumptions are a 73 x 30 inch portable table and 30 inches of clearance on every side. These are examples only, not verified measurements for the actual table.
+- Evaluates both table orientations; returns a preliminary geometry fit only, not a safety or accessibility certification.
+- Future optional scanning: multi-photo photogrammetry/3D Gaussian splatting for visualization, LiDAR/RoomPlan on compatible iOS devices for measured dimensions, calibrated references where LiDAR is unavailable, obstacle segmentation and therapist final review.
+- No scan processing, upload, booking storage, or real-world automated space approval is currently active.
+- Before production: consent, privacy policy, retention/deletion, image sanitization, secure storage if user intentionally submits room images, accessibility, fallbacks and device compatibility.
+
+## Commercial workflow (not connected yet)
+1. Client requests appointment; validate availability and quote on trusted server. Booking begins `pending_betty` for room or `awaiting_payment` for apartment, provided Addison rules permit.
+2. For room bookings, create durable pending request and assign a short opaque booking code. Obtain Betty's consent to use business SMS. Send the minimum needed information (time, duration, room) through a verified Twilio sender. Avoid client health details.
+3. Validate signed inbound Twilio webhook, recipient/sender, booking-code association, replay/idempotency and authorization. An unqualified YES transitions that request to `awaiting_payment`; NO to `declined`. A message with conditions or alternative time becomes `needs_clarification`, and a client proposal must be accepted and re-approved if needed.
+4. Do not assume silence is approval. Enforce timeouts and owner escalation. Do not create confirmed room availability without Betty's actual approval.
+5. Recheck therapist schedule for overlaps and hold the slot before taking payment. Make Google Calendar synchronization idempotent, and preserve errors/retry without double booking.
+6. For Square, create a server-generated hosted checkout with the saved, immutable price snapshot, verified webhook, and payment reconciliation. Zelle/Venmo are manual reconciliation until official supported business integrations exist. Crypto payments require a dedicated receiving wallet, exchange quote expiry, destination/tag, validated settlement and USD/tax receipts. Never ask for or store private keys.
+7. Send client confirmation only after room approval (where required), payment condition, and calendar creation have all passed. Show and record affirmative consent to the $25 deposit/cancellation terms before checkout. For a same-day cancellation, retain the deposit only if contract and applicable law permit; otherwise refund appropriately. Earlier cancellations refund the deposit. For cancellations initiated by the business, refund the deposit. Rescheduling/no-show/other exceptions require explicit reviewed terms.
+8. Protect customer contact details using signed-in owner roles and row-level security. Do not disclose sensitive client details to Betty. Record consent, event log, invoice and payment status separately.
+
+## Outstanding configuration before activation
+- Betty's consent, chosen SMS number and handling of simultaneous requests.
+- Your verified business sending number, Twilio credentials, webhook signature validation, opt-in/opt-out compliance.
+- Google Calendar OAuth and specific calendar ID (do not request Betty's primary calendar).
+- Square account, payment webhook, environment configuration and verified checkout; alternative payment business identifiers.
+- Booking persistence schema and RLS, paid/pending/cancelled state machine, access controls, tests, monitoring.
+- Evening start hour (currently provisional 5 PM), tax/tip, cancellation terms and refund exceptions, lead times, location-specific rules.
+- Review PROJECT-BOUNDARIES.md before any live commercial activation. No secrets in Git.
+
+## Manual preview test matrix
+- Weekday 10:00 AM room: 60m $100, 90m $150, 120m $200.
+- Weekday 10:00 AM apartment: $120, $180, $240.
+- Weekday 5:00 PM, Saturday, Sunday, Addison Resident Massage Room: $120, $180, $240.
+- Weekday 5:00 PM, Saturday, Sunday, apartment: $150, $225, $300.
+- On $100 session: $25 deposit, $75 remaining; on $120 session: $25 deposit, $95 remaining.
+- Same-day cancellation means same America/New_York calendar date, not a rolling 24-hour window. Early cancellation: refund deposit; same-day: deposit retained subject to published terms and law.
+- The existing prototype does not charge, refund, confirm payment, or perform a cancellation.
+- YES / Yes. -> pending payment; NO -> declined.
+- “Yes, but only until 3”; “Can she come later?”; “No, unavailable until 2” -> needs clarification.
+- Apartment skips Betty room-approval step but is **not** a final confirmed booking.
+- No external side effects occur from preview; dashboard and public-facing pages must not imply otherwise.
+
+
+## Payment-method activation checklist
+- Square: create/verify merchant account, use official server-side Square payment link/checkout API, calculate price from persisted booking, verify payment webhooks and idempotency, and record refunds. The existing Stripe placeholder is NOT Square and must never be reused as a live Addison checkout.
+- Zelle: confirm that your business bank account supports Zelle for business; provide only verified business recipient details, and manually reconcile transfers.
+- Venmo: use a valid Venmo business profile and confirmed payment reference; reconcile merchant transactions before marking a booking paid.
+- Crypto: determine supported tokens/networks, use a separate business receiving wallet without exposing signing keys, generate a per-invoice quote/expiry and reference (tag where needed), verify sufficient confirmations and actual asset, and log USD values for taxes.
+- No booking may move to confirmed status merely because the customer selected a method or clicked an outbound payment link.
+- Do not put payment access tokens, merchant credentials, or customer financial data into the public GitHub repository.

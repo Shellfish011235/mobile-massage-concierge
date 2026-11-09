@@ -96,6 +96,16 @@ export default function TherapistHomePage() {
         <ServiceAreaMap />
       </section>
 
+      <section className="mt-10 grid grid-cols-1 gap-3">
+        <Link href="/demo/business" className="rounded-pom-xl border border-border bg-card p-4 text-sm font-medium text-primary underline">Shellfish Business POC · Interactive demo</Link>
+        <Link href="/therapist/calendar" className="rounded-pom-xl border border-border bg-card p-4 text-sm font-medium text-primary underline">
+          Calendar &amp; travel buffers
+        </Link>
+        <Link href="/therapist/clinical-tools" className="rounded-pom-xl border border-border bg-card p-4 text-sm font-medium text-primary underline">
+          Intake &amp; SOAP provider options (external)
+        </Link>
+      </section>
+
       <section className="mt-12 space-y-4">
         <div>
           <p className="pom-overline text-muted-foreground">Account</p>

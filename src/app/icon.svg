@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="Anam Beo">
+  <rect width="192" height="192" rx="42" fill="#173d34"/>
+  <circle cx="96" cy="96" r="61" fill="none" stroke="#d8be8c" stroke-width="5"/>
+  <path d="M96 49C62 75 62 116 96 143c34-27 34-68 0-94z" fill="none" stroke="#d8be8c" stroke-width="5"/>
+  <path d="M48 96h96" stroke="#d8be8c" stroke-width="4"/>
+</svg>
