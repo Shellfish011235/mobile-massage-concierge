@@ -1,3 +1,4 @@
+import "./addison-luxury.css";
 import type { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
@@ -16,5 +17,5 @@ export const viewport: Viewport = {
 };
 
 export default function AddisonLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return children;
+  return <div className="addison-luxury">{children}</div>;
 }
