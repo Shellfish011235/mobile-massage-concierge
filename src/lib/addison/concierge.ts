@@ -33,12 +33,12 @@ export function quoteAddison(input: {
 }): { rateCents: number; totalCents: number; peak: boolean; label: string } {
   const { weekday, hour } = addisonLocalParts(input.appointmentIso);
   const peak = weekday === "Sat" || weekday === "Sun" || hour >= ADDISON_EVENING_HOUR;
-  const rateCents = peak ? 15000 : input.location === "massage_room" ? 10000 : 12000;
+  const rateCents = input.location === "massage_room" ? (peak ? 12000 : 10000) : (peak ? 15000 : 12000);
   return {
     rateCents,
     totalCents: Math.round((rateCents * input.durationMinutes) / 60),
     peak,
-    label: peak ? "Evening / weekend" : input.location === "massage_room" ? "Massage room" : "In-apartment",
+    label: input.location === "massage_room" ? (peak ? "Addison Resident Massage Room · evening / weekend" : "Addison Resident Massage Room · weekday") : (peak ? "In-apartment · evening / weekend" : "In-apartment · weekday"),
   };
 }
 
