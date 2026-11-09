@@ -4,6 +4,13 @@ Status: future roadmap only. No real booking transfers, referral payments, publi
 ## Scope
 The Addison Massage Concierge is the first implementation. Anam Beo Bodywork is its service business. Future participating therapists maintain their own branding, verified licenses, insurance, service regions, scheduling, fees, consent and payment accounts.
 
+## Product boundary: clinical intake is a later, separate module
+The Addison Massage Concierge is a commercial scheduling, payment, therapist availability, client contact and safety workflow application. It is NOT currently a patient-intake, clinical charting, EHR or HIPAA-compliant medical record product. Do not collect treatment histories, diagnoses or detailed medical notes in peer matching, booking messages, public reviews or referral attribution. Use only minimum necessary scheduling and contact information subject to privacy and consumer protection rules.
+
+Future optional module: Clinical Intake & Records, with standalone consent and access scopes, provider/tenant record boundaries, data minimization, secure storage, retention, audit, breach-response, vendor review, and HIPAA business associate agreements when applicable. Adding clinical records requires separate legal and security reviews; HIPAA applicability depends on the entities and transactions, not whether a service is called a massage.
+
+HIPAA and referral law are separate. Lack of HIPAA applicability does not by itself permit per-patient referral compensation. Preserve the legal gate for Florida patient brokering, fee splitting, and other federal/state rules where they apply.
+
 ## Availability / on-the-clock feature
 A therapist may opt in to the network and set one of:
 - OFF DUTY: no new peer referral offers.
