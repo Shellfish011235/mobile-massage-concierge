@@ -37,7 +37,7 @@ export const ADDISON_CANCELLATION_COPY =
 
 export function bettyRoomRequestMessage(booking: AddisonNotificationBooking): string {
   if (booking.location !== "massage_room") throw new Error("Betty approval is for the massage room only");
-  return "Anam Beo room request " + booking.reference + ": " +
+  return "The Addison Massage Concierge room request " + booking.reference + ": " +
     addisonAppointmentLabel(booking.appointmentIso) + ", " +
     booking.durationMinutes + " min. Reply YES " + booking.reference +
     " or NO " + booking.reference + ". Any changes can be sent as a normal reply for manual review.";
@@ -53,19 +53,19 @@ export function ownerRoomStatusMessage(reference: string, status: "approved" | "
 }
 
 export function clientRequestReceivedMessage(booking: AddisonNotificationBooking): string {
-  return "Anam Beo: We received your request for " + addisonAppointmentLabel(booking.appointmentIso) +
+  return "The Addison Massage Concierge (Anam Beo Bodywork): We received your request for " + addisonAppointmentLabel(booking.appointmentIso) +
     ". This is NOT a confirmed appointment. We will contact you after availability is checked.";
 }
 
 export function clientDeclinedMessage(booking: AddisonNotificationBooking): string {
-  return "Anam Beo: Unfortunately " + addisonAppointmentLabel(booking.appointmentIso) +
+  return "The Addison Massage Concierge (Anam Beo Bodywork): Unfortunately " + addisonAppointmentLabel(booking.appointmentIso) +
     " is unavailable. No deposit is due. Please request another time.";
 }
 
 export function clientDepositRequestMessage(booking: AddisonNotificationBooking, verifiedHostedCheckoutUrl: string): string {
   const { depositCents, remainingCents } = addisonDepositBreakdown(booking.totalCents);
   if (!/^https:\/\//i.test(verifiedHostedCheckoutUrl)) throw new Error("Hosted checkout must use HTTPS");
-  return "Anam Beo: Your requested " + addisonAppointmentLabel(booking.appointmentIso) +
+  return "The Addison Massage Concierge (Anam Beo Bodywork): Your requested " + addisonAppointmentLabel(booking.appointmentIso) +
     " time is available but NOT yet booked. Pay the " + money(depositCents) +
     " deposit to complete booking: " + verifiedHostedCheckoutUrl +
     ". The deposit is credited toward your " + money(booking.totalCents) +
@@ -76,7 +76,7 @@ export function clientDepositRequestMessage(booking: AddisonNotificationBooking,
 /** Use ONLY after verified deposit receipt, authoritative schedule hold and calendar write. */
 export function clientConfirmedMessage(booking: AddisonNotificationBooking): string {
   const { depositCents, remainingCents } = addisonDepositBreakdown(booking.totalCents);
-  return "Anam Beo: CONFIRMED " + booking.reference + " for " +
+  return "The Addison Massage Concierge (Anam Beo Bodywork): CONFIRMED " + booking.reference + " for " +
     addisonAppointmentLabel(booking.appointmentIso) + " (" +
     (booking.location === "massage_room" ? "Addison massage room" : "in-apartment") +
     "). " + money(depositCents) + " deposit received and credited to " +
