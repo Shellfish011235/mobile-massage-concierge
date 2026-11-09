@@ -2,7 +2,7 @@
 
 ## What this branch implements
 - Dedicated `/addison` **local-only preview** and therapist Requests navigation link.
-- Isolated advance weekday rates: massage room $100/hour; resident apartment $120/hour; evening (proposed 5 PM onward) or weekend $150/hour.
+- Isolated rates: Addison Resident Massage Room $100/hour weekdays before 5 PM, $120/hour weeknights/weekends; resident apartment $120/hour weekdays before 5 PM, $150/hour weeknights/weekends. Evening threshold (5 PM) is provisional.
 - Duration 60 / 90 / 120 minutes, priced in integer cents.
 - America/New_York calendar classification for weekday/weekend pricing.
 - Conservative Betty SMS reply parser: unqualified YES / NO only. Qualified, ambiguous, or rescheduling responses require human review.
@@ -30,7 +30,7 @@
 ## Manual preview test matrix
 - Weekday 10:00 AM room: 60m $100, 90m $150, 120m $200.
 - Weekday 10:00 AM apartment: $120, $180, $240.
-- Weekday 5:00 PM, Saturday, Sunday: $150, $225, $300 (both locations).
+- Weekday 5:00 PM, Saturday, Sunday, Addison Resident Massage Room: $120, $180, $240.\n- Weekday 5:00 PM, Saturday, Sunday, apartment: $150, $225, $300.
 - YES / Yes. -> pending payment; NO -> declined.
 - “Yes, but only until 3”; “Can she come later?”; “No, unavailable until 2” -> needs clarification.
 - Apartment skips Betty room-approval step but is **not** a final confirmed booking.
