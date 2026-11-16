@@ -2,7 +2,7 @@
 
 Before modifying **any** code, tests, CI, config, workflows, infrastructure, documentation, deployment or financial/XRPL integrations:
 
-1. Read the Shellfish canonical security contract: https://github.com/Shellfish011235/shellfish-agent-control/blob/main/SECURITY_CONTRACT.md . If inaccessible, STOP and mark the task BLOCKED; request the full contract. Do not assume the reference is optional.
+1. Read and follow the full local `SECURITY_CONTRACT.md`. If missing or unreadable, STOP and mark the task BLOCKED. The canonical source is `Shellfish011235/shellfish-agent-control/SECURITY_CONTRACT.md`; do not rely on external network access to retrieve the local policy.
 2. Follow the **SHELLFISH Security-First Engineering Contract** for the entire task; applicable stricter local security rules take precedence.
 3. Record the root cause, authoritative state and trust boundaries before proposing changes. Never trust client-supplied financial/execution state as authoritative. Fail closed for new risk if evidence is unavailable.
 4. Preserve explicit approvals, bounded permissions, paper-only/live-money separation, replay/idempotency checks, independent evidence, accounting, secrets handling and auditability.
